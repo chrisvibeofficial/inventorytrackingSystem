@@ -4,36 +4,30 @@ const orderModel = require('../models/order')
 
 exports.createOrderItem = async (req, res) => {
   try {
-    const { id, pd } = req.params;
-    const checkUser = await orderModel.findOne({ where: { userId: id } });
-
-    if (!checkUser) {
-      return res.status(400).json('Invalid userId');
+    const { productId } = req.params;
+    const { orderId, quantity } = req.body
+    const checkProduct = await productModel.findOne({ where: { id: productId } });
+    console.log(checkProduct);
+    
+    if (!checkProduct) {
+      return res.status(404).json('Product is unavailable')
     }
 
-
-    const randomNum = Math.floor(Math.random() * 10000);
-    const ID = 'OI' + randomNum
-
-    const { orderId, productId, quantity } = req.body;
+    const ranNum = Math.floor(Math.random() * 10000);
+    const ID = 'OI' + ranNum;
 
     const data = {
       id: ID,
       orderId,
-      productId,
+      productId: checkProduct.dataValues.id,
       quantity
     }
 
-    const newOrderItems = await orderItemModel.create(data);
-    res.status(201).json('Order has been made successfully');
-    
-    const checkProduct = await productModel.findOne({ where: { id: pd } });
-    let newStock = checkProduct.dataValues.stock;
-    
-    if (newOrderItems) {
-
-    }
-
+    const newOrderItem = await orderItemModel.create(data)
+    res.status(201).json({
+      message: 'Items listed successfully',
+      data: newOrderItem
+    })
   } catch (error) {
     res.status(500).json({
       message: 'Internal server error',
