@@ -33,7 +33,7 @@ exports.createOrderItem = async (req, res) => {
     if (newOrderItem) {
       const checkStock = checkProduct.dataValues.stock
       const newStock = checkProduct.dataValues.stock - checkStock
-      await productModel.update(newStock, { where: { stock: checkStock } })
+      await productModel.update({ stock: newStock })
     }
 
   } catch (error) {
