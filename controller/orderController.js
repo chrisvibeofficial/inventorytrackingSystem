@@ -13,15 +13,13 @@ exports.createOrder = async (req, res) => {
     const randomNum = Math.floor(Math.random() * 10000);
     const ID = 'OR' + randomNum
 
-    const { totalPrice } = req.body;
+    let price = 0;
 
     const data = {
       id: ID,
       userId: checkUser.dataValues.id,
-      totalPrice
+      totalPrice: price
     };
-
-    console.log(data);
 
     const newOrder = await orderModel.create(data);
     res.status(201).json({

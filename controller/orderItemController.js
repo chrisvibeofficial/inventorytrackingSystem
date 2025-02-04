@@ -1,14 +1,11 @@
 const orderItemModel = require('../models/order_item');
 const productModel = require('../models/product');
 const orderModel = require('../models/order');
-const { where } = require('sequelize');
 
 exports.createOrderItem = async (req, res) => {
   try {
-    const { productId } = req.params;
-    const { orderId, quantity } = req.body
+    const { productId, orderId, quantity } = req.body
     const checkProduct = await productModel.findOne({ where: { id: productId } });
-    console.log(checkProduct);
 
     if (!checkProduct) {
       return res.status(404).json('Product is unavailable')
@@ -20,7 +17,7 @@ exports.createOrderItem = async (req, res) => {
     const data = {
       id: ID,
       orderId,
-      productId: checkProduct.dataValues.id,
+      productId,
       quantity
     }
 
@@ -31,9 +28,8 @@ exports.createOrderItem = async (req, res) => {
     })
 
     if (newOrderItem) {
-      const checkStock = checkProduct.dataValues.stock
-      const newStock = checkProduct.dataValues.stock - checkStock
-      await productModel.update({ stock: newStock })
+      await checkProduct.update({ stock: checkProduct.stock - quantity });
+      await orderModel.update({ totalPrice: checkProduct.price * quantity }, { where: { id: orderId } });
     }
 
   } catch (error) {

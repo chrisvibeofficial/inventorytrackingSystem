@@ -1,7 +1,7 @@
 const { Sequelize, Model } = require('sequelize');
 
-const sequelize = new Sequelize('sql8759379', 'sql8759379', 'x4njfdipLh', {
-  host: 'sql8.freesqldatabase.com',
+const sequelize = new Sequelize('inventorytrackingSystem', 'root', '@Chrisvibe070697000', {
+  host: 'localhost',
   dialect: 'mysql'
 });
 
