@@ -5,4 +5,4 @@ const sequelize = new Sequelize('sql8759379', 'sql8759379', 'x4njfdipLh', {
   dialect: 'mysql'
 });
 
-module.exports = sequelize
+module.exports = sequelize 
